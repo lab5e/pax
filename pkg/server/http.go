@@ -6,8 +6,8 @@ import (
 	"net"
 	"net/http"
 
-	paxv1 "github.com/borud/paxcli/pkg/pax/v1"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	paxv1 "github.com/lab5e/pax/pkg/pax/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

@@ -2,7 +2,7 @@
 package main
 
 import (
-	"github.com/borud/paxcli/pkg/util"
+	"github.com/lab5e/pax/pkg/util"
 )
 
 var opt struct {

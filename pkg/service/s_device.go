@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/borud/paxcli/pkg/model"
-	paxv1 "github.com/borud/paxcli/pkg/pax/v1"
+	"github.com/lab5e/pax/pkg/model"
+	paxv1 "github.com/lab5e/pax/pkg/pax/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

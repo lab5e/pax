@@ -8,10 +8,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/borud/paxcli/pkg/server"
-	"github.com/borud/paxcli/pkg/span"
-	"github.com/borud/paxcli/pkg/store"
-	"github.com/borud/paxcli/pkg/store/sqlitestore"
+	"github.com/lab5e/pax/pkg/server"
+	"github.com/lab5e/pax/pkg/span"
+	"github.com/lab5e/pax/pkg/store"
+	"github.com/lab5e/pax/pkg/store/sqlitestore"
 )
 
 type serverCmd struct {
@@ -72,13 +72,10 @@ func (s *serverCmd) maybeFetchBacklog(db store.Store) error {
 		return fmt.Errorf("db error: %v", err)
 	}
 
-	log.Print("here 1")
-
 	// if we have some data there is no need to fetch the backlog
 	if len(samples) > 0 {
 		return nil
 	}
-	log.Print("here 2")
 
 	log.Printf("fetching entire data backlog, his may take a while")
 	fetch := span.Fetch{
@@ -86,6 +83,5 @@ func (s *serverCmd) maybeFetchBacklog(db store.Store) error {
 		CollectionID: opt.CollectionID,
 		DB:           db,
 	}
-	defer log.Print("here 3")
 	return fetch.Execute()
 }

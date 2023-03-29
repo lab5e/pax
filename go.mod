@@ -1,4 +1,4 @@
-module github.com/borud/paxcli
+module github.com/lab5e/pax
 
 go 1.20
 

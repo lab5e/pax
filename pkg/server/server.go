@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/borud/paxcli/pkg/model"
-	"github.com/borud/paxcli/pkg/span"
-	"github.com/borud/paxcli/pkg/store"
+	"github.com/lab5e/pax/pkg/model"
+	"github.com/lab5e/pax/pkg/span"
+	"github.com/lab5e/pax/pkg/store"
 	"google.golang.org/grpc"
 )
 

@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/borud/paxcli/pkg/model"
+	"github.com/lab5e/pax/pkg/model"
 	"github.com/stretchr/testify/require"
 )
 

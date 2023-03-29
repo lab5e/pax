@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/borud/paxcli/pkg/store"
 	"github.com/jmoiron/sqlx"
+	"github.com/lab5e/pax/pkg/store"
 	_ "modernc.org/sqlite" // include driver
 )
 

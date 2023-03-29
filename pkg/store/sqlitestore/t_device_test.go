@@ -3,7 +3,7 @@ package sqlitestore
 import (
 	"testing"
 
-	"github.com/borud/paxcli/pkg/model"
+	"github.com/lab5e/pax/pkg/model"
 	"github.com/stretchr/testify/require"
 )
 

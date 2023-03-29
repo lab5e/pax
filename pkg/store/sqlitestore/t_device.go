@@ -1,8 +1,8 @@
 package sqlitestore
 
 import (
-	"github.com/borud/paxcli/pkg/model"
 	"github.com/jmoiron/sqlx"
+	"github.com/lab5e/pax/pkg/model"
 )
 
 type deviceStatements struct {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/borud/paxcli/pkg/span"
-	"github.com/borud/paxcli/pkg/store/sqlitestore"
+	"github.com/lab5e/pax/pkg/span"
+	"github.com/lab5e/pax/pkg/store/sqlitestore"
 )
 
 type fetchCmd struct{}

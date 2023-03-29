@@ -1,8 +1,8 @@
 package service
 
 import (
-	paxv1 "github.com/borud/paxcli/pkg/pax/v1"
-	"github.com/borud/paxcli/pkg/store"
+	paxv1 "github.com/lab5e/pax/pkg/pax/v1"
+	"github.com/lab5e/pax/pkg/store"
 )
 
 // Service implements our gRPC service.

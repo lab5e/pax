@@ -9,11 +9,11 @@ import (
 	"sync"
 	"time"
 
-	pax "github.com/borud/paxcli/pkg/pax/v1"
+	pax "github.com/lab5e/pax/pkg/pax/v1"
 
-	"github.com/borud/paxcli/pkg/model"
 	"github.com/lab5e/go-spanapi/v4"
 	"github.com/lab5e/go-spanapi/v4/apitools"
+	"github.com/lab5e/pax/pkg/model"
 	"google.golang.org/protobuf/proto"
 )
 

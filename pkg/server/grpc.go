@@ -5,8 +5,8 @@ import (
 	"log"
 	"net"
 
-	paxv1 "github.com/borud/paxcli/pkg/pax/v1"
-	"github.com/borud/paxcli/pkg/service"
+	paxv1 "github.com/lab5e/pax/pkg/pax/v1"
+	"github.com/lab5e/pax/pkg/service"
 	"google.golang.org/grpc"
 )
 
