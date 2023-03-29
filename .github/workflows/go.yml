@@ -24,9 +24,9 @@ jobs:
 
     - name: Build
       run: 
-        make gen
-        make pax
+        buf generate
+        cd cmd/pax && go build -o ../../bin/pax
 
     - name: Test
       run: 
-        make test
+        go test -v ./...
