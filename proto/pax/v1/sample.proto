@@ -1,0 +1,23 @@
+syntax = "proto3";
+package pax.v1;
+
+message Sample {
+	string device_id			= 1;
+	string message_id			= 2;
+	int64 timestamp				= 3;
+	uint32 bluetooth_count		= 4;
+	uint32 wifi_count			= 5;
+	uint32 seq					= 6;
+	uint32 uptime_seconds		= 7;
+	float core_temperature		= 8;
+}
+
+message ListSamplesRequest {
+	int64 from	= 1;
+	int64 until	= 2;
+	int32 limit = 3;
+}
+
+message ListSamplesResponse {
+	repeated Sample samples = 1;
+}

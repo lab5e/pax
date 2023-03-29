@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pax.v1;
+
+// Message is the message format used by the pax counter.
+message Message {
+    uint32 bluetooth_device_count = 1;
+    uint32 wifi_device_count = 2;
+    float core_temperature = 3;
+    uint32 sequence_number = 4;
+    uint32 seconds_uptime = 5;
+};
+

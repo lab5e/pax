@@ -1,0 +1,32 @@
+syntax = "proto3";
+package pax.v1;
+
+import "google/api/httpbody.proto";
+import "google/api/annotations.proto";
+
+import "pax/v1/device.proto";
+import "pax/v1/sample.proto";
+import "pax/v1/data.proto";
+
+// Pax service provides a simple API to query devices and samples.
+service PaxService {
+	rpc GetDevice(GetDeviceRequest) returns (GetDeviceResponse) {
+		option (google.api.http) = {
+			get : "/api/v1/devices/{id}"
+		};
+	};
+	
+	rpc UpdateDevice(UpdateDeviceRequest) returns (UpdateDeviceResponse) {};
+	
+	rpc ListDevices(ListDevicesRequest) returns (ListDevicesResponse) {
+		option (google.api.http) = {
+			get : "/api/v1/devices"
+		};
+	};
+	
+	rpc ListData(ListDataRequest) returns (ListDataResponse) {
+		option (google.api.http) = {
+			get : "/api/v1/data"
+		};
+	};
+}

@@ -1,0 +1,6 @@
+bin
+pkg/pax
+doc/swagger
+pax.db-wal
+pax.db-shm
+pax.db

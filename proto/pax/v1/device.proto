@@ -1,0 +1,32 @@
+syntax = "proto3";
+package pax.v1;
+
+message Device {
+	string id = 1;
+	string name = 2;
+	double lat = 3;
+	double lon = 4;
+}
+
+message GetDeviceRequest {
+	string id = 1;
+}
+
+message GetDeviceResponse {
+	Device device = 1;
+}
+
+message UpdateDeviceRequest {
+	Device device = 1;
+}
+
+message UpdateDeviceResponse {
+	Device device = 1;
+}
+
+message ListDevicesRequest {}
+
+message ListDevicesResponse {
+	repeated Device devices = 1;
+}
+

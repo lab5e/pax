@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pax.v1;
+
+import "pax/v1/device.proto";
+import "pax/v1/sample.proto";
+
+message Data {
+	string device_id		= 1;
+	repeated Sample samples	= 2;
+}
+
+message ListDataRequest {
+	int64 since	= 1;
+	int64 until	= 2;
+	int32 limit = 3;
+}
+
+message ListDataResponse {
+	repeated Data data = 1;
+}
