@@ -3,6 +3,7 @@ module github.com/lab5e/pax
 go 1.20
 
 require (
+	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/jmoiron/sqlx v1.3.5

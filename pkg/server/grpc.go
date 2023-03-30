@@ -21,6 +21,7 @@ func (s *Server) startGRPC() error {
 	}
 
 	go func() {
+		log.Printf("starting gRPC on [%s]", s.config.GRPCListenAddr)
 		err = s.grpcServer.Serve(grpcListener)
 		if err != nil {
 			log.Printf("grpc server error [%s]: %v", s.config.GRPCListenAddr, err)
