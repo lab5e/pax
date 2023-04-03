@@ -35,3 +35,25 @@ docker-push:
 	@echo "Pushing new docker image"
 	@docker push ghcr.io/lab5e/pax:$(VERSION)
 	@docker push ghcr.io/lab5e/pax:latest
+
+
+SPEC:=$(PWD)/doc/swagger/pax/v1
+GEN:=$(PWD)/frontend/src/app/api/pax
+openapi-client:
+	@mkdir -p $(GEN)/model/
+	@rm -f $(GEN)/model/*.ts
+	@docker run --platform linux/arm64 \
+		-v$(GEN):/gen \
+		-v$(SPEC):/spec \
+		-it openapitools/openapi-generator-cli:v6.2.1 generate \
+		--git-user-id=lab5e \
+		--git-repo-id=pax-client  \
+		--package-name pax-client \
+		-g typescript-angular -i /spec/service.swagger.json -o /gen
+	@rm -fR $(GEN)/.openapi-generator
+	@rm -fR $(GEN)/*.sh
+	@rm -fR $(GEN)/.gitignore
+	@rm -fR $(GEN)/README.md
+	@rm -fR $(GEN)/.openapi-generator-ignore
+
+
