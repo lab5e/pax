@@ -40,7 +40,7 @@ func (s *Server) startHTTP() error {
 	mux.PathPrefix("/api/v1").Handler(restMux).Methods("GET")
 
 	s.httpServer = &http.Server{
-		Handler: mux,
+		Handler: addCORSHeaders(mux.ServeHTTP),
 	}
 
 	go func() {
