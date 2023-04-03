@@ -1,0 +1,42 @@
+h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+.error {
+    border: solid 1px darkred;
+    background: pink;
+    color: maroon;
+    border-radius: 0.5em;
+    padding: 1em;
+    font-weight: 400;
+}
+
+.chart-container {
+    padding: 1em;
+    display: grid;
+    justify-items: center;
+}
+
+.chart {
+    margin: 1em;
+    width: 100%;
+    border-radius: 0.25em;
+    border: solid 1px darkgray;
+}
+
+.stats {
+    font-size: 10pt;
+    font-weight: 100;
+    text-align: right;
+    padding: 1em;
+}
+
+.button {
+    height: 2em;
+    width: 8em;
+    margin: .25em;
+    font-size: 14pt;
+    border: solid 1px blue;
+    border-radius: .25em;
+}
