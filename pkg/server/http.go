@@ -2,14 +2,17 @@ package server
 
 import (
 	"context"
-	"fmt"
+	"io/fs"
 	"log"
 	"net"
 	"net/http"
+	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/lab5e/pax/doc"
+	"github.com/lab5e/pax/frontend"
 	paxv1 "github.com/lab5e/pax/pkg/pax/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -34,13 +37,18 @@ func (s *Server) startHTTP() error {
 
 	swaggerFiles := http.FileServer(http.FS(doc.SwaggerFiles))
 
+	frontendFS, err := fs.Sub(frontend.FrontendFS, "dist/frontend")
+	if err != nil {
+		return err
+	}
+
 	mux := mux.NewRouter()
-	mux.HandleFunc("/", s.handleIndex).Methods("GET")
 	mux.PathPrefix("/doc/").Handler(http.StripPrefix("/doc/", swaggerFiles)).Methods("GET")
 	mux.PathPrefix("/api/v1").Handler(restMux).Methods("GET")
+	mux.PathPrefix("/").Handler(http.FileServer(http.FS(frontendFS)))
 
 	s.httpServer = &http.Server{
-		Handler: addCORSHeaders(mux.ServeHTTP),
+		Handler: handlers.LoggingHandler(os.Stdout, addCORSHeaders(mux.ServeHTTP)),
 	}
 
 	go func() {
@@ -54,22 +62,4 @@ func (s *Server) startHTTP() error {
 	}()
 
 	return nil
-}
-
-func (s *Server) handleIndex(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, `
-	<!DOCTYPE html>
-	<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>PAX</title>
-	</head>
-	<body>
-		<ul>
-			<li><a href="/api/v1/data">Data endpoint</a></li>
-			<li><a href="/api/v1/devices">Devices endpoint</a></li>
-			<li><a href="/doc/swagger/pax/v1/">OpenAPI</a></li>		
-	</body>
-	</html>
-	`)
 }

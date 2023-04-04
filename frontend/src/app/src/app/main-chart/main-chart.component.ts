@@ -26,7 +26,7 @@ export class MainChartComponent implements OnInit, AfterViewInit {
     errorMessage: string = "";
     lastPoll: Date = new Date();
     chart?: Chart<any>;
-    visibleInterval: number = 6;
+    visibleInterval: number = 24;
 
     hasError(): boolean {
         return this.errorMessage != "";

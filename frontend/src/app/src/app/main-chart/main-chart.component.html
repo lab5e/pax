@@ -12,10 +12,9 @@
 </div>
 
 <div>
-    <button (click)="showInterval(24)" [ngClass]="{button: true, activeButton: visibleInterval==24}">24h</button>
+    <button (click)="showInterval(168)" [ngClass]="{button: true, activeButton: visibleInterval==168}">1w</button>
+    <button (click)="showInterval(24)" [ngClass]="{button: true, activeButton: visibleInterval==24}">1d</button>
     <button (click)="showInterval(12)" [ngClass]="{button: true, activeButton: visibleInterval==12}">12h</button>
-    <button (click)="showInterval(6)" [ngClass]="{button: true, activeButton: visibleInterval==6}">6h</button>
-    <button (click)="showInterval(3)" [ngClass]="{button: true, activeButton: visibleInterval==3}">3h</button>
     <button (click)="showInterval(1)" [ngClass]="{button: true, activeButton: visibleInterval==1}">Last hour</button>
 </div>
 <!--<div *ngFor="let sampleSet of dataPoints">

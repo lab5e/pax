@@ -1,9 +1,12 @@
-VERSION=0.1.4
+VERSION=0.1.6
 all: gen test lint vet build
 
 build: pax
 
 pax:
+	@cd cmd/$@ && go build -o ../../bin/$@
+
+ang:
 	@cd cmd/$@ && go build -o ../../bin/$@
 
 lint:
