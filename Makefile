@@ -1,4 +1,4 @@
-VERSION=0.1.3
+VERSION=0.1.4
 all: gen test lint vet build
 
 build: pax
@@ -28,13 +28,13 @@ docker-image: gen test
 	@echo "Cross compiling"
 	@cd cmd/pax && GOOS=linux GOARCH=amd64 go build -o ../../bin/pax-linux --trimpath -tags osusergo,netgo -ldflags="-s -w"
 	@docker build -t pax . && \
-		docker tag pax:latest ghcr.io/lab5e/pax:$(VERSION)
-		docker tag pax:latest ghcr.io/lab5e/pax:latest
+		docker tag pax:latest borud/pax:$(VERSION)
+		docker tag pax:latest borud/pax:latest
 
 docker-push:
 	@echo "Pushing new docker image"
-	@docker push ghcr.io/lab5e/pax:$(VERSION)
-	@docker push ghcr.io/lab5e/pax:latest
+	@docker push borud/pax:$(VERSION)
+	@docker push borud/pax:latest
 
 
 SPEC:=$(PWD)/doc/swagger/pax/v1
