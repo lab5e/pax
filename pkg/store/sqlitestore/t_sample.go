@@ -15,8 +15,8 @@ type sampleStatements struct {
 }
 
 const (
-	hardRowLimit = 1000
-	defaultLimit = 500
+	hardRowLimit = 50000
+	defaultLimit = 20000
 )
 
 func (s *sqliteStore) initSampleStatements() error {
