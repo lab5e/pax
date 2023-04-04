@@ -71,7 +71,7 @@ export class MainChartComponent implements OnInit, AfterViewInit {
     createChart(): void {
         let bleSamples = this.dataPoints.map(v => {
             return {
-                label: (v.deviceId || "") + " (BLE)",
+                label: (v.deviceName || "") + " (BLE)",
                 data: v.samples?.map(sample => {
                     return {
                         x: new Date(parseInt(sample.timestamp!)),
@@ -83,7 +83,7 @@ export class MainChartComponent implements OnInit, AfterViewInit {
 
         let wifiSamples = this.dataPoints.map(v => {
             return {
-                label: (v.deviceId || "") + " (WiFi)",
+                label: (v.deviceName || "") + " (WiFi)",
                 data: v.samples?.map(sample => {
                     return {
                         x: new Date(parseInt(sample.timestamp!)),

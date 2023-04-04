@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  pax:
+    image: ghcr.io/lab5e/pax:latest
+    restart: on-error
+    ports:
+      - "4500:4500/tcp"
+    env_file:
+      - apitoken.env
+

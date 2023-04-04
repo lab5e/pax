@@ -14,6 +14,9 @@ import { V1Sample } from './v1Sample';
 
 export interface V1Data { 
     deviceId?: string;
+    deviceName?: string;
+    lat?: number;
+    lon?: number;
     samples?: Array<V1Sample>;
 }
 
