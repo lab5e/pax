@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiHost: "https://some.api.host"
+    apiHost: "https://pax.lab5e.com"
 };
