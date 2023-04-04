@@ -7,7 +7,6 @@ image.
 
 Use the `ngwrap.sh` script to run a docker container without installing every required component.
 
-
 ## Build a new version
 
 run `bash ngwrap.sh install` then `bash ngwrap.sh run build`. This is equivalent to running `ng build` if you have all the bells and whistles installed.
@@ -18,7 +17,7 @@ run `make ng-serve`. This is equivalent to running `ng serve` if you have all th
 
 ## Host field
 
-The API host is set in the src/environments types. The `.prod.ts` file is used for the prod build and the unadorned type is used for the development server. 
+The API host is set in the src/environments types. The `.prod.ts` file is used for the prod build and the unadorned type is used for the development server.
 
 ----
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.6.
