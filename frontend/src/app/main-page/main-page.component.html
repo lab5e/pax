@@ -1,0 +1,40 @@
+<!-- Regular setup: Top heading about 3-4 em high, content area split into list and detail -->
+<div class="page">
+    <div class="heading">
+        <span class="logo">
+
+        </span>
+        <span class="title">
+            PAX
+        </span>
+    </div>
+    <div class="content">
+        <div class="list">
+            <div class="list-item" [ngClass]="{ 'active' : (activeDevice == null)}" (click)="setActiveDevice()">
+                <div class="item-title">
+                    Alle
+                </div>
+                <div class="item-subtitle">
+                    Vis aggregerte data for alle tellere
+                </div>
+            </div>
+            <div *ngFor="let device of devices" class="list-item" (click)="setActiveDevice(device)"
+                [ngClass]="{ 'active' : (activeDevice == device)}">
+                <div class="item-title">
+                    {{ device.name }}
+                </div>
+                <div class="item-subtitle">
+                    Id: {{ device.id }}
+                    <span *ngIf="device.lat || 0 != 0">
+                        Posisjon: {{ device.lat }} {{ device.lon }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="detail">
+
+            <app-main-chart *ngIf="activeDevice==null"></app-main-chart>
+            <app-device-view *ngIf="activeDevice != null" [device]="activeDevice"></app-device-view>
+        </div>
+    </div>
+</div>

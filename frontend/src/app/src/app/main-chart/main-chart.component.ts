@@ -108,8 +108,7 @@ export class MainChartComponent implements OnInit, AfterViewInit {
                                 },
                                 tooltipFormat: 'HH:mm'
                             }
-                        },
-
+                        }
                     },
                     elements: {
                         point: {

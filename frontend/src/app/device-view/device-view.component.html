@@ -1,0 +1,27 @@
+<div class="device-status-page">
+    <div class="device-info">
+        <div class="info-title">{{device.name}}</div>
+        <div class="metric">
+            <div class="metric-value">Busy</div>
+            <div class="metric-desc">75% of max</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">12</div>
+            <div class="metric-desc">Max</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">12</div>
+            <div class="metric-desc">Min</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">32</div>
+            <div class="metric-desc">Random Metrics</div>
+        </div>
+    </div>
+    <div class="location">
+        <app-device-map-view [device]="device"></app-device-map-view>
+    </div>
+    <div class="data">
+        Chart goes here
+    </div>
+</div>
