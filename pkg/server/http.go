@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/lab5e/gotileserver"
 	"github.com/lab5e/pax/doc"
 	"github.com/lab5e/pax/frontend"
 	paxv1 "github.com/lab5e/pax/pkg/pax/v1"
@@ -45,6 +46,13 @@ func (s *Server) startHTTP() error {
 	mux := mux.NewRouter()
 	mux.PathPrefix("/doc/").Handler(http.StripPrefix("/doc/", swaggerFiles)).Methods("GET")
 	mux.PathPrefix("/api/v1").Handler(restMux).Methods("GET")
+
+	httpMux := http.NewServeMux()
+
+	// TODO: Use the proper external address here. Either "http://localhost:4500" (dev) or https://pax.lab5e.com (production)
+
+	gotileserver.RegisterHandler(httpMux, "http://localhost:4500")
+	mux.PathPrefix("/map").Handler(httpMux)
 	mux.PathPrefix("/").Handler(http.FileServer(http.FS(frontendFS)))
 
 	s.httpServer = &http.Server{
