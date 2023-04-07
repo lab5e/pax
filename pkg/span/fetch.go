@@ -63,9 +63,28 @@ func (f *Fetch) fetchDevices() error {
 	for _, dev := range devices.GetDevices() {
 		name := dev.GetTags()["name"]
 
-		err := f.DB.AddDevice(model.Device{
+		var lat, lon float64
+		var err error
+		posStr := dev.GetTags()["lat"]
+		if posStr != "" {
+			lat, err = strconv.ParseFloat(posStr, 64)
+			if err != nil {
+				log.Printf("Error converting latitude (%s) for device %s: %v", posStr, dev.GetDeviceId(), err)
+			}
+		}
+		posStr = dev.GetTags()["lon"]
+		if posStr != "" {
+			lon, err = strconv.ParseFloat(posStr, 64)
+			if err != nil {
+				log.Printf("Error converting longitude (%s) for device %s: %v", posStr, dev.GetDeviceId(), err)
+			}
+		}
+
+		err = f.DB.AddDevice(model.Device{
 			ID:   *dev.DeviceId,
 			Name: name,
+			Lat:  lat,
+			Lon:  lon,
 		})
 		if err == nil {
 			log.Printf("added device [%s]", *dev.DeviceId)
