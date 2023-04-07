@@ -1,3 +1,4 @@
+// Package frontend is a package that contains the embedded frontend files
 package frontend
 
 import "embed"
