@@ -33,7 +33,6 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy 
                 "Style © <a href='http://openmaptiles.org/'>MapTiler</a> | " +
                 "Data © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
         }));
-        this.map.addControl(new FullscreenControl());
 
         let marker = new Marker({
             color: '#ff0000',
