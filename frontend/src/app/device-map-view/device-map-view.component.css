@@ -1,0 +1,8 @@
+.map {
+    display: flex;
+    overflow: hidden;
+    border-radius: 1em;
+    border: solid 1px silver;
+    width: 100%;
+    height: 100%;
+}

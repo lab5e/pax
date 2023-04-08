@@ -9,6 +9,7 @@ import { MainChartComponent } from './src/app/main-chart/main-chart.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { DeviceViewComponent } from './device-view/device-view.component';
 import { DeviceMapViewComponent } from './device-map-view/device-map-view.component';
+import { NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import { DeviceMapViewComponent } from './device-map-view/device-map-view.compon
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
+        NgxMapLibreGLModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

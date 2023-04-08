@@ -26,24 +26,26 @@
     background-color: #2696f9;
     color: white;
     border-radius: 1em;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 3fr 1fr;
 }
 
 .metric-value {
-    font-size: 48pt;
+    font-size: 6vh;
     text-align: center;
-    vertical-align: middle;
-    margin-top: 1em;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .metric-desc {
-    font-size: 14pt;
+    font-size: 1vw;
     text-align: center;
 }
 
 .location {
     background-color: #dddddd;
     border-radius: 1em;
-    padding: 1em;
 }
 
 .data {
