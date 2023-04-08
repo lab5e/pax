@@ -2,34 +2,34 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 10px;
     grid-row-gap: 10px;
+    grid-column-gap: 10px;
     height: 100%;
 }
 
 .device-info {
-    padding: 1em;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-columns: repeat(2, 1fr);
-    grid-column-gap: .5em;
-    grid-row-gap: .5em;
+    grid-template-rows: 1fr 1fr;
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
 }
 
 .info-title {
-    font-size: 36pt;
+    font-size: 24pt;
     color: #005aa7;
     grid-column: span 2;
+    text-align: center;
 }
 
 .metric {
-    background-color: #005aa7;
+    background-color: #2696f9;
     color: white;
     border-radius: 1em;
 }
 
 .metric-value {
-    font-size: 36pt;
+    font-size: 48pt;
     text-align: center;
     vertical-align: middle;
     margin-top: 1em;
@@ -41,11 +41,20 @@
 }
 
 .location {
-    border: solid 1px black;
+    background-color: #dddddd;
+    border-radius: 1em;
+    padding: 1em;
 }
 
 .data {
     grid-column: span 2;
-    border: solid 1px black;
     vertical-align: middle;
+}
+
+#chart {
+    display: flex;
+}
+
+#chart svg {
+    flex: 1
 }

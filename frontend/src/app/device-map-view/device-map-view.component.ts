@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { V1Device } from '../api/pax';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-device-map-view',
@@ -14,4 +15,7 @@ export class DeviceMapViewComponent implements OnInit {
     ngOnInit(): void {
     }
 
+    apiHost(): string {
+        return environment.apiHost
+    }
 }

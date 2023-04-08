@@ -8,7 +8,7 @@
     <canvas #chart class="chart"></canvas>
 </div>
 <div class="stats">
-    Last update {{ lastPoll | date:'yyyy-MM-dd HH:mm'}}
+    Last update {{ lastPoll | date:'yyyy-MM-dd HH:mm'}} ({{ dataPoints.length }} sets)
 </div>
 
 <div>
@@ -17,17 +17,20 @@
     <button (click)="showInterval(12)" [ngClass]="{button: true, activeButton: visibleInterval==12}">12h</button>
     <button (click)="showInterval(1)" [ngClass]="{button: true, activeButton: visibleInterval==1}">Last hour</button>
 </div>
-<!--<div *ngFor="let sampleSet of dataPoints">
+<div *ngFor="let sampleSet of dataPoints">
     <table>
         <tr>
+            <th>Device</th>
+            <th></th>
             <th>Timestamp</th>
             <th>Bluetooth</th>
             <th>WiFi</th>
         </tr>
         <tr *ngFor="let sample of sampleSet.samples">
+            <td>{{ sample.deviceId }}</td>
             <td>{{ sample.timestamp | date:'YYYY-MM-dd HH:mm' }}</td>
             <td>{{ sample.bluetoothCount }}</td>
             <td>{{ sample.wifiCount }}</td>
         </tr>
     </table>
-</div>-->
+</div>

@@ -28,12 +28,12 @@
 
 .list {
     direction: rtl;
-    width: 20em !important;
+    width: 20em;
     min-height: 100%;
     background-color: #dddddd;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .list-item {

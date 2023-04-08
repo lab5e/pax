@@ -18,6 +18,12 @@ export class MainPageComponent implements OnInit {
             next: (res: V1ListDevicesResponse) => {
                 if (res.devices) {
                     this.devices = res.devices;
+                    //HACK: Preselect a device to speed up edit-reload cycle
+                    this.devices.forEach((d) => {
+                        if (d.id! == "17dj5j4ce8bkbg") {
+                            this.activeDevice = d;
+                        }
+                    });
                 }
             },
             error: (e) => {
