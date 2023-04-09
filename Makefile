@@ -1,4 +1,4 @@
-VERSION=0.1.7
+VERSION=0.1.11
 all: gen test lint vet build
 
 build: pax
