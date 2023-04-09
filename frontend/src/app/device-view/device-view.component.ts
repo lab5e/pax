@@ -71,35 +71,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                 this.errorMessage = e.message;
             },
             complete: () => {
-                let maxBle: number = d3.max(this.data, d => d.ble) || 0;
-                let maxWifi: number = d3.max(this.data, d => d.wifi) || 0;
-                let busyIndicator: string = "Rolig";
-                let i = this.data.length - 1;
-                let current = this.data[i].ble + this.data[i].wifi;
-                let percent: number = Math.round(current * 100 / (maxBle + maxWifi));
-
-                if (percent >= 80) {
-                    busyIndicator = "Svært høy"
-                }
-                if (percent >= 60 && percent < 80) {
-                    busyIndicator = "Høy";
-                }
-                if (percent >= 40 && percent < 60) {
-                    busyIndicator = "Normal";
-                }
-                if (percent >= 25 && percent < 40) {
-                    busyIndicator = "Lav";
-                }
-                if (percent < 25) {
-                    busyIndicator = "Svært Lav";
-                }
-                this.metrics = [
-                    { bigText: String(maxBle), smallText: "Maks antall BLE" },
-                    { bigText: String(maxWifi), smallText: "Maks antall WiFi" },
-                    { bigText: String(this.data.length), smallText: "Målinger i perioden" },
-                    { bigText: busyIndicator, smallText: "Folketetthet (" + percent + "% av maks)" }
-                ];
-
+                this.buildMetrics();
                 this.lastPoll = new Date();
                 this.showChart();
             },
@@ -110,6 +82,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
 
     showChart(): void {
         if (this.chart) {
+            // Remove the old one if it already exists
             this.renderer.removeChild(this.chartRef?.nativeElement, this.chart, false);
         }
         let width = this.chartRef?.nativeElement.offsetWidth;
@@ -191,4 +164,34 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
         this.renderer.appendChild(this.chartRef?.nativeElement, this.chart)
     }
 
+    buildMetrics(): void {
+        let maxBle: number = d3.max(this.data, d => d.ble) || 0;
+        let maxWifi: number = d3.max(this.data, d => d.wifi) || 0;
+        let busyIndicator: string = "Rolig";
+        let i = this.data.length - 1;
+        let current = this.data[i].ble + this.data[i].wifi;
+        let percent: number = Math.round(current * 100 / (maxBle + maxWifi));
+
+        if (percent >= 80) {
+            busyIndicator = "Svært høy"
+        }
+        if (percent >= 60 && percent < 80) {
+            busyIndicator = "Høy";
+        }
+        if (percent >= 40 && percent < 60) {
+            busyIndicator = "Normal";
+        }
+        if (percent >= 25 && percent < 40) {
+            busyIndicator = "Lav";
+        }
+        if (percent < 25) {
+            busyIndicator = "Svært Lav";
+        }
+        this.metrics = [
+            { bigText: String(maxBle), smallText: "Maks antall BLE" },
+            { bigText: String(maxWifi), smallText: "Maks antall WiFi" },
+            { bigText: String(this.data.length), smallText: "Målinger i perioden" },
+            { bigText: busyIndicator, smallText: "Folketetthet (" + percent + "% av maks)" }
+        ];
+    }
 }
