@@ -49,7 +49,7 @@ func (s *Server) startHTTP() error {
 
 	httpMux := http.NewServeMux()
 
-	gotileserver.RegisterHandler(httpMux)
+	gotileserver.RegisterHandler(httpMux, s.config.TileServerURL)
 	mux.PathPrefix("/map").Handler(httpMux)
 	mux.PathPrefix("/").Handler(http.FileServer(http.FS(frontendFS)))
 

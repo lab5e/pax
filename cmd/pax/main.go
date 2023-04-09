@@ -11,6 +11,7 @@ var opt struct {
 	GRPCListenAddr string    `long:"grpc" default:":4501" description:"gRPC listen address" required:"yes"`
 	Token          string    `long:"token" env:"SPAN_API_TOKEN" description:"Span API Token" required:"yes"`
 	CollectionID   string    `long:"collection" description:"Span Collection ID for PAX counters" default:"17dlb1hl0l800a"`
+	ServerURL      string    `long:"server-url" description:"External URL for tile server" default:"http://localhost:4500" required:"yes"`
 	Server         serverCmd `command:"server" description:"start server"`
 	Fetch          fetchCmd  `command:"fetch" description:"fetch historical data"`
 }

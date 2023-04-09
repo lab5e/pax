@@ -57,6 +57,7 @@ func (s *serverCmd) Execute([]string) error {
 		GRPCListenAddr:   opt.GRPCListenAddr,
 		SpanToken:        opt.Token,
 		SpanCollectionID: opt.CollectionID,
+		TileServerURL:    opt.ServerURL,
 	})
 
 	c := make(chan os.Signal, 2)

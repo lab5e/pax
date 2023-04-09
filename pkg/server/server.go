@@ -25,6 +25,7 @@ type Config struct {
 	GRPCListenAddr   string
 	SpanToken        string
 	SpanCollectionID string
+	TileServerURL    string
 }
 
 // Create and start server instance.
