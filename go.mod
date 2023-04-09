@@ -9,12 +9,16 @@ require (
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lab5e/go-spanapi/v4 v4.4.1
+	github.com/lab5e/gotileserver v0.0.1
 	github.com/stretchr/testify v1.8.2
 	google.golang.org/genproto v0.0.0-20230327215041-6ac7f18bb9d5
 	google.golang.org/grpc v1.54.0
 	google.golang.org/protobuf v1.30.0
 	modernc.org/sqlite v1.21.1
 )
+
+// For development
+//replace github.com/lab5e/gotileserver => ../gotileserver
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
