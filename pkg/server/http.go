@@ -49,9 +49,7 @@ func (s *Server) startHTTP() error {
 
 	httpMux := http.NewServeMux()
 
-	// TODO: Use the proper external address here. Either "http://localhost:4500" (dev) or https://pax.lab5e.com (production)
-	log.Printf("Registering map tile server with external address %s", s.config.HTTPHost)
-	gotileserver.RegisterHandler(httpMux, s.config.HTTPHost)
+	gotileserver.RegisterHandler(httpMux)
 	mux.PathPrefix("/map").Handler(httpMux)
 	mux.PathPrefix("/").Handler(http.FileServer(http.FS(frontendFS)))
 
