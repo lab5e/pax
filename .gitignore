@@ -5,3 +5,4 @@ pax.db-wal
 pax.db-shm
 pax.db
 apitoken.env
+.DS_Store
