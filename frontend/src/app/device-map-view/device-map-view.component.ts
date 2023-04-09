@@ -45,8 +45,12 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     ngOnDestroy(): void {
+        this.enableRotation = false;
         this.map?.remove();
     }
+
+    cameraBearing: number = 0;
+    enableRotation: boolean = false;
 
     addMarkerForDevice(device?: V1Device, map?: Map): void {
         if (!device || !map) {
@@ -57,13 +61,18 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
         }
         let d_lat = device.lat
         let d_lon = device.lon
-
         let marker = new Marker({
             color: '#ff0000',
         });
 
         marker.setLngLat([d_lat, d_lon]);
         marker.addTo(this.map!);
+
+        if (this.enableRotation) {
+            // Already animating something
+            this.enableRotation = false;
+            this.cameraBearing = 0;
+        }
 
         // Fly to the marker
         this.map?.flyTo({
@@ -88,5 +97,31 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
             essential: true
         });
 
+
+        let rotateCamera = (ts: number) => {
+            if (!this.enableRotation) {
+                return;
+            }
+            // clamp the rotation between 0 -360 degrees
+            // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
+            map.rotateTo(this.cameraBearing, { duration: 0 });
+            // Request the next frame of the animation.
+            this.cameraBearing += 0.25;
+            if (this.cameraBearing >= 360) {
+                this.cameraBearing = 0;
+            }
+            requestAnimationFrame(rotateCamera);
+        }
+
+        // Stop rotation when there's a click
+        this.map?.on('click', () => {
+            this.enableRotation = false;
+        });
+
+        this.map?.once('moveend', () => {
+            this.enableRotation = true;
+            rotateCamera(0);
+            //            map.rotateTo(180.0, { duration: 6000 });
+        });
     }
 }
