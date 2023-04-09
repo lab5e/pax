@@ -54,7 +54,9 @@ func (s *Server) startHTTP() error {
 	mux.PathPrefix("/").Handler(http.FileServer(http.FS(frontendFS)))
 
 	s.httpServer = &http.Server{
-		Handler: handlers.CombinedLoggingHandler(os.Stdout, addCORSHeaders(mux.ServeHTTP)),
+		Handler: handlers.ProxyHeaders(
+			handlers.CombinedLoggingHandler(os.Stdout,
+				addCORSHeaders(mux.ServeHTTP))),
 	}
 
 	go func() {
