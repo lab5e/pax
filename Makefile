@@ -22,7 +22,7 @@ gen:
 	@buf generate
 
 count:
-	@gocloc --not-match-d pkg/pax .
+	@gocloc --not-match-d 'pkg/pax|frontend' .
 
 clean:
 	@rm -rf bin pkg/pax doc/swagger
