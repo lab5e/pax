@@ -25,6 +25,7 @@ type Config struct {
 	GRPCListenAddr   string
 	SpanToken        string
 	SpanCollectionID string
+	HTTPHost         string
 }
 
 // Create and start server instance.
