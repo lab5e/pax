@@ -1,7 +1,7 @@
 <div class="chartlegend">
     <div #legend id="legend" class="legend"></div>
     <div #chart id="chart" class="chart"></div>
-    <div>Sist oppdatert {{ samples.lastPoll |date:'YYYY-mm-dd HH:MM'}}</div>
+    <div>Sist oppdatert {{ samples.lastDataUpdate |date:'YYYY-mm-dd HH:MM'}}</div>
 </div>
 <div class="allmap">
     <app-device-map-view class="allmap"></app-device-map-view>

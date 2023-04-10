@@ -7,6 +7,9 @@
         <span class="title">
             PAX
         </span>
+        <a [href]="" (click)="autoPlay(!this.autoPlayEnabled)">Play</a>
+        <span *ngIf="this.autoPlayEnabled">[Playing]</span>
+        <span *ngIf="!this.autoPlayEnabled">[Stopped]</span>
     </div>
     <div class="content">
         <div class="list">

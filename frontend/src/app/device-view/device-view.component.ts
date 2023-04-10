@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { V1Device } from '../api/pax';
 import * as d3 from 'd3';
 import * as Plot from '@observablehq/plot';
@@ -19,17 +19,21 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
     @Input("device") device: V1Device = {};
     @ViewChild("chart") chartRef?: ElementRef;
 
-    metrics: Metric[] = [];
+    metricDensity: string = "";
+    metricDensityPercent: number = 0;
+    metricSampleCount: number = 0;
+    metricWifi: number = 0;
+    metricBLE: number = 0;
+
     data: DeviceSample[] = [];
     errorMessage: string = "";
-
-    chartIntervalHours: number = 24;
 
     chart?: (SVGElement | HTMLElement);
 
     constructor(
         protected samples: SampleService,
         private renderer: Renderer2,
+        private cd: ChangeDetectorRef,
     ) { }
 
     ngOnInit(): void {
@@ -47,9 +51,23 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     loadData(): void {
-        this.data = this.samples.dataForDevice(this.device.id!);
-        this.buildMetrics();
-        this.showChart();
+        var elements: DeviceSample[] = [];
+        this.samples.allData().subscribe({
+            next: (d: DeviceSample) => {
+                if (d.id == this.device.id) {
+                    elements.push(d);
+                }
+            },
+            complete: () => {
+                this.data = elements;
+                this.showChart();
+                this.buildMetrics();
+                // We change the bindings in a change event but it won't cascade. This forces the
+                // change detection to run one more time without issuing an error 
+                // see: https://angular.io/errors/NG0100
+                this.cd.detectChanges();
+            },
+        });
     }
 
     showChart(): void {
@@ -77,7 +95,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
             x: {
                 label: "Klokkeslett",
                 grid: true,
-                tickFormat: d3.utcFormat("%H:%M"),
+                tickFormat: d3.timeFormat("%H:%M"),
                 domain: [startDate, endDate]
             },
             marks: [
@@ -122,7 +140,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                 Plot.frame(),
             ],
             color: {
-                legend: true,
+                legend: false,
                 domain: ["wifi", "ble"],
                 range: ["red", "blue"]
             },
@@ -132,7 +150,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                 background: '#eeeeee',
                 fill: '#808080',
             }
-        })
+        });
         this.renderer.appendChild(this.chartRef?.nativeElement, this.chart)
     }
 
@@ -159,11 +177,10 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
         if (percent < 25) {
             busyIndicator = "Svært Lav";
         }
-        this.metrics = [
-            { bigText: String(maxBle), smallText: "Maks antall BLE" },
-            { bigText: String(maxWifi), smallText: "Maks antall WiFi" },
-            { bigText: String(this.data.length), smallText: "Målinger i perioden" },
-            { bigText: busyIndicator, smallText: "Folketetthet (" + percent + "% av maks)" }
-        ];
+        this.metricBLE = maxBle;
+        this.metricWifi = maxWifi;
+        this.metricSampleCount = this.data.length;
+        this.metricDensity = busyIndicator;
+        this.metricDensityPercent = percent;
     }
 }

@@ -1,12 +1,24 @@
 <div class="device-status-page">
     <div class="data">
         <div #chart id="chart" class="chart"></div>
-        Sist oppdatert {{ samples.lastPoll |date:'YYYY-mm-dd HH:MM'}}
+        Sist oppdatert {{ samples.lastDataUpdate |date:'YYYY-mm-dd HH:MM'}}
     </div>
     <div class="device-info">
-        <div *ngFor="let metric of metrics" class="metric">
-            <div class="metric-value">{{ metric.bigText }}</div>
-            <div class="metric-desc">{{ metric.smallText }}</div>
+        <div class="metric">
+            <div class="metric-value">{{ metricBLE }}</div>
+            <div class="metric-desc">Maks antall bluetooth-enheter</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">{{ metricWifi }}</div>
+            <div class="metric-desc">Maks antall WiFi-enheter</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">{{ metricSampleCount }}</div>
+            <div class="metric-desc">Målinger i perioden</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">{{ metricDensity }}</div>
+            <div class="metric-desc">Folketetthet ({{ metricDensityPercent }}% av maks)</div>
         </div>
     </div>
     <div class="location">
