@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { MainChartComponent } from './src/app/main-chart/main-chart.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { DeviceViewComponent } from './device-view/device-view.component';
 import { DeviceMapViewComponent } from './device-map-view/device-map-view.component';
@@ -15,7 +14,6 @@ import { DeviceOverviewComponent } from './device-overview/device-overview.compo
 @NgModule({
     declarations: [
         AppComponent,
-        MainChartComponent,
         MainPageComponent,
         DeviceViewComponent,
         DeviceMapViewComponent,
