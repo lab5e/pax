@@ -18,7 +18,7 @@
                     Vis aggregerte data for alle tellere
                 </div>
             </div>
-            <div *ngFor="let device of samples.devicesWithData" class="list-item" (click)="setActiveDevice(device)"
+            <div *ngFor="let device of activeDevices" class="list-item" (click)="setActiveDevice(device)"
                 [ngClass]="{ 'active' : (activeDevice == device)}">
                 <div class="item-title">
                     {{ device.name }}

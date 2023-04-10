@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PaxServiceService, V1Data, V1Device, V1ListDataResponse, V1ListDevicesResponse, V1Sample } from './api/pax';
-import { combineLatest, interval } from 'rxjs';
+import { Observable, ReplaySubject, combineLatest, interval } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 // Also a custom sample setup
@@ -18,12 +18,30 @@ export interface DeviceSample {
 export class SampleService {
 
     public errorMessage: string = "";
-    public allDevices: V1Device[] = [];
-    public devicesWithData: V1Device[] = [];
-    public allSamples: V1Data[] = [];
+
     public lastPoll: Date = new Date();
 
-    dataUpdater = interval(60000).subscribe((val) => console.debug('Called update', val));
+    // Subject for initial data load
+    private dataSubject = new ReplaySubject<DeviceSample>();
+
+    // Subjects for individual device load
+    private deviceSubjects: Map<string, ReplaySubject<DeviceSample[]>> = new Map<string, ReplaySubject<DeviceSample[]>>();
+
+    // Subject for updates
+    private updateSubject = new ReplaySubject<DeviceSample>();
+
+    private activeDeviceSubject = new ReplaySubject<V1Device>();
+
+    private allSamples: V1Data[] = [];
+
+    // Return a list of active devices, ie devices with data in the selected interval. We won't care about 
+    // devices that goes out of fashion, ie if the selected interval changes and the device hasn't sent any
+    // data. A simple refresh of the page will fix that issue.
+    public activeDevices(): Observable<V1Device> {
+        return this.activeDeviceSubject;
+    }
+
+    //dataUpdater = interval(60000).subscribe((val) => console.debug('Called update', val));
 
     constructor(
         protected paxService: PaxServiceService,
@@ -35,24 +53,23 @@ export class SampleService {
         let chartIntervalHours = 24;
         let dayAgo: string = "" + (new Date().getTime() - (chartIntervalHours * 3600 * 1000));
         let now: string = "" + (new Date().getTime());
-        combineLatest([
-            this.paxService.paxServiceListDevices(),
-            this.paxService.paxServiceListData(dayAgo, now)
-        ]).subscribe({
-            next: (value: [V1ListDevicesResponse, V1ListDataResponse]) => {
-                if (value[0].devices) {
-                    this.allDevices = value[0].devices;
+        this.paxService.paxServiceListData(dayAgo, now).subscribe({
+            next: (value: V1ListDataResponse) => {
+                if (value.data) {
+                    this.allSamples = value.data;
                 }
-                if (value[1].data) {
-                    this.allSamples = value[1].data;
-                }
-            },
-            error: (e: HttpErrorResponse) => {
-                this.errorMessage = e.message;
-            },
-            complete: () => {
-                this.lastPoll = new Date();
-                this.devicesWithData = this.allSamples.map(v => {
+                this.allSamples.forEach(data => {
+                    data.samples?.forEach(d => {
+                        this.dataSubject.next({
+                            id: data.deviceId || "",
+                            name: data.deviceName || "",
+                            time: new Date(parseInt(d.timestamp!)),
+                            ble: d.bluetoothCount || 0,
+                            wifi: d.wifiCount || 0,
+                        });
+                    });
+                });
+                this.allSamples.map(v => {
                     let ret: V1Device = {
                         id: v.deviceId,
                         name: v.deviceName,
@@ -60,7 +77,22 @@ export class SampleService {
                         lon: v.lon,
                     };
                     return ret;
-                });
+                }).forEach((device => {
+                    this.activeDeviceSubject.next(device);
+                }));
+            },
+            error: (e: HttpErrorResponse) => {
+                this.errorMessage = e.message;
+                // Pass on errors to the subjects
+                this.activeDeviceSubject.error(e);
+                this.dataSubject.complete();
+            },
+            complete: () => {
+                this.lastPoll = new Date();
+
+                // FIXME: Postpone the complete call when we start polling?
+                this.activeDeviceSubject.complete();
+                this.dataSubject.complete();
             },
         });
     }
@@ -85,22 +117,7 @@ export class SampleService {
         return [];
     }
 
-    public allData(): DeviceSample[] {
-        let ret: DeviceSample[] = [];
-
-        this.allSamples.forEach(data => {
-            ret = ret.concat(data.samples?.map(d => {
-                let s: DeviceSample = {
-                    id: data.deviceId || "",
-                    name: data.deviceName || "",
-                    time: new Date(parseInt(d.timestamp!)),
-                    ble: d.bluetoothCount || 0,
-                    wifi: d.wifiCount || 0,
-                };
-                return s;
-            }) || []);
-        });
-
-        return ret;
+    public allData(): Observable<DeviceSample> {
+        return this.dataSubject;
     }
 }

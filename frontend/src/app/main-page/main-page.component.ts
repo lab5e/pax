@@ -9,11 +9,17 @@ import { SampleService } from '../sample.service';
 })
 export class MainPageComponent implements OnInit {
 
+    activeDevices: V1Device[] = [];
     activeDevice?: V1Device;
 
     constructor(
         protected samples: SampleService,
     ) {
+        this.samples.activeDevices().subscribe({
+            next: (d: V1Device) => {
+                this.activeDevices.push(d);
+            },
+        })
     }
 
     ngOnInit(): void {

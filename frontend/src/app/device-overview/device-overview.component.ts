@@ -14,16 +14,26 @@ export class DeviceOverviewComponent implements OnInit, AfterViewInit {
     @ViewChild("legend") legendRef?: ElementRef;
     legend?: (SVGElement | HTMLElement);
 
+    data: DeviceSample[] = [];
     constructor(
         protected samples: SampleService,
         private renderer: Renderer2,
-    ) { }
+    ) {
+
+    }
 
     ngOnInit(): void {
     }
 
     ngAfterViewInit(): void {
-        this.showChart();
+        this.samples.allData().subscribe({
+            next: (s: DeviceSample) => {
+                this.data.push(s);
+            },
+            complete: () => {
+                this.showChart();
+            }
+        });
     }
 
     showChart(): void {
@@ -31,10 +41,8 @@ export class DeviceOverviewComponent implements OnInit, AfterViewInit {
             // Remove the old one if it already exists
             this.renderer.removeChild(this.chartRef?.nativeElement, this.chart, false);
         }
-        let data = this.samples.allData();
-
         let width = this.chartRef?.nativeElement.offsetWidth;
-        let max = (d3.max(data, (d: DeviceSample) => (d.ble + d.wifi)) || 1);
+        let max = (d3.max(this.data, (d: DeviceSample) => (d.ble + d.wifi)) || 1);
         const hhmmFormat = d3.timeFormat("%m-%d %H:00")
 
         this.chart = Plot.plot({
@@ -49,7 +57,7 @@ export class DeviceOverviewComponent implements OnInit, AfterViewInit {
                 label: "Enhet",
             },
             marks: [
-                Plot.cell(data, {
+                Plot.cell(this.data, {
                     x: d => hhmmFormat(d.time),
                     y: "name",
                     fill: (d: DeviceSample) => {
