@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, OnIn
 import { V1Device } from '../api/pax';
 import { environment } from 'src/environments/environment';
 import { AttributionControl, FullscreenControl, Map, NavigationControl, Marker, MarkerOptions } from 'maplibre-gl';
+import { SampleService } from '../sample.service';
 
 @Component({
     selector: 'app-device-map-view',
@@ -14,13 +15,16 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
     @ViewChild("map") mapContainer?: ElementRef<HTMLElement>;
     map?: Map;
 
-    constructor() { }
+    constructor(
+        private samples: SampleService,
+    ) {
+    }
 
     ngOnInit(): void {
     }
 
     ngOnChanges() {
-        this.addMarkerForDevice(this.device, this.map);
+        this.flyToMarker(this.device, this.map);
     }
     ngAfterViewInit(): void {
         if (this.map) {
@@ -40,8 +44,12 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
                 "Style © <a href='http://openmaptiles.org/'>MapTiler</a> | " +
                 "Data © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
         }));
-
-        this.addMarkerForDevice(this.device, this.map);
+        this.samples.activeDevices().subscribe({
+            complete: () => {
+                this.samples.addMapMarkers(this.map!);
+            }
+        });
+        this.flyToMarker(this.device, this.map);
     }
 
     ngOnDestroy(): void {
@@ -52,7 +60,7 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
     cameraBearing: number = 0;
     enableRotation: boolean = false;
 
-    addMarkerForDevice(device?: V1Device, map?: Map): void {
+    flyToMarker(device?: V1Device, map?: Map): void {
         if (!device || !map) {
             return;
         }
@@ -77,14 +85,6 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
             });
             return
         }
-        let d_lat = device.lat
-        let d_lon = device.lon
-        let marker = new Marker({
-            color: '#ff0000',
-        });
-
-        marker.setLngLat([d_lat, d_lon]);
-        marker.addTo(this.map!);
 
         if (this.enableRotation) {
             // Already animating something
@@ -96,7 +96,7 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
         this.map?.flyTo({
             // These options control the ending camera position: centered at
             // the target, at zoom level 9, and north up.
-            center: [d_lat, d_lon],
+            center: [device.lat, device.lon],
             zoom: 16,
             pitch: 45,
             bearing: 0,
