@@ -1,8 +1,17 @@
-<div class="chartlegend">
-    <div #legend id="legend" class="legend"></div>
-    <div #chart id="chart" class="chart"></div>
-    <div>Sist oppdatert {{ samples.lastDataUpdate |date:'YYYY-mm-dd HH:MM'}}</div>
-</div>
-<div class="allmap">
-    <app-device-map-view class="allmap"></app-device-map-view>
+<div class="overview-page">
+    <div class="main-chart">
+        <div class="all-chart">
+            <h2>Totalt for alle enheter</h2>
+            <div #allchart id="allchart" class="allchart"></div>
+            <div class="update">Sist oppdatert {{ samples.lastDataUpdate |date:'YYYY-mm-dd HH:MM'}}</div>
+        </div>
+    </div>
+    <div class="cell-chart">
+        <h2>Per enhet</h2>
+        <div #chart id="chart" class="chart"></div>
+        <div #legend id="legend" class="legend"></div>
+    </div>
+    <div class="allmap">
+        <app-device-map-view></app-device-map-view>
+    </div>
 </div>

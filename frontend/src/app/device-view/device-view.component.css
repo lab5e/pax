@@ -15,13 +15,6 @@
     grid-row-gap: 1em;
 }
 
-.info-title {
-    font-size: 24pt;
-    color: #005aa7;
-    grid-column: span 2;
-    text-align: center;
-}
-
 .metric {
     background-color: #2696f9;
     color: white;
@@ -54,5 +47,6 @@
 }
 
 .chart {
+    padding: 1em;
     width: 80vw;
 }

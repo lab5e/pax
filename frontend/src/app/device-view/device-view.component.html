@@ -1,5 +1,6 @@
 <div class="device-status-page">
     <div class="data">
+        <h2>{{ device.name }}</h2>
         <div #chart id="chart" class="chart"></div>
         Sist oppdatert {{ samples.lastDataUpdate |date:'YYYY-mm-dd HH:MM'}}
     </div>
