@@ -11,8 +11,19 @@
 .heading {
     color: white;
     background-color: #009bdf;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     height: 5em;
-    padding: 1em;
+}
+
+.logo {
+    min-width: 250px;
+}
+
+.start-stop {
+    cursor: pointer;
 }
 
 .heading .title {
@@ -76,4 +87,9 @@
     background-color: #eeeeee;
     flex: auto 1;
     padding: 1em;
+}
+
+.autoplay {
+    margin-right: 1em;
+    margin-left: auto;
 }
