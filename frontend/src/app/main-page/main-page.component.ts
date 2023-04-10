@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PaxServiceService, V1Device, V1ListDevicesResponse } from '../api/pax';
+import { V1Device } from '../api/pax';
+import { SampleService } from '../sample.service';
 
 @Component({
     selector: 'app-main-page',
@@ -8,29 +9,11 @@ import { PaxServiceService, V1Device, V1ListDevicesResponse } from '../api/pax';
 })
 export class MainPageComponent implements OnInit {
 
-    devices: V1Device[] = [];
     activeDevice?: V1Device;
 
     constructor(
-        protected paxService: PaxServiceService,
+        protected samples: SampleService,
     ) {
-        paxService.paxServiceListDevices().subscribe({
-            next: (res: V1ListDevicesResponse) => {
-                if (res.devices) {
-                    this.devices = res.devices;
-                    //HACK: Preselect a device to speed up edit-reload cycle
-                    this.devices.forEach((d) => {
-                        if (d.id! == "17dj5j4ce8bkbg") {
-                            this.activeDevice = d;
-                        }
-                    });
-                }
-            },
-            error: (e) => {
-                console.error(e);
-            },
-            complete: () => { },
-        });
     }
 
     ngOnInit(): void {

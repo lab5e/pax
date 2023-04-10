@@ -1,0 +1,21 @@
+.chart {
+    width: 80vw;
+    height: 30vh;
+}
+
+
+.chartlegend {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.legend svg {
+    text-align: center;
+}
+
+.allmap {
+    width: 100%;
+    height: 50vh;
+}

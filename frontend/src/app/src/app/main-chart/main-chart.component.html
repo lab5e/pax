@@ -1,36 +1,10 @@
-<h1>PAX Counters</h1>
 <div *ngIf="hasError()" class="error">
-    Error retrieving data: {{ errorMessage }}
+    Error retrieving data: {{ samples.errorMessage }}
 </div>
-
 
 <div class="chart-container">
     <canvas #chart class="chart"></canvas>
 </div>
 <div class="stats">
-    Last update {{ lastPoll | date:'yyyy-MM-dd HH:mm'}} ({{ dataPoints.length }} sets)
-</div>
-
-<div>
-    <button (click)="showInterval(168)" [ngClass]="{button: true, activeButton: visibleInterval==168}">1w</button>
-    <button (click)="showInterval(24)" [ngClass]="{button: true, activeButton: visibleInterval==24}">1d</button>
-    <button (click)="showInterval(12)" [ngClass]="{button: true, activeButton: visibleInterval==12}">12h</button>
-    <button (click)="showInterval(1)" [ngClass]="{button: true, activeButton: visibleInterval==1}">Last hour</button>
-</div>
-<div *ngFor="let sampleSet of dataPoints">
-    <table>
-        <tr>
-            <th>Device</th>
-            <th></th>
-            <th>Timestamp</th>
-            <th>Bluetooth</th>
-            <th>WiFi</th>
-        </tr>
-        <tr *ngFor="let sample of sampleSet.samples">
-            <td>{{ sample.deviceId }}</td>
-            <td>{{ sample.timestamp | date:'YYYY-MM-dd HH:mm' }}</td>
-            <td>{{ sample.bluetoothCount }}</td>
-            <td>{{ sample.wifiCount }}</td>
-        </tr>
-    </table>
+    Last update {{ samples.lastPoll | date:'yyyy-MM-dd HH:mm'}} ({{ samples.allSamples.length }} sets)
 </div>

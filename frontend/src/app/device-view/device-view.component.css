@@ -53,10 +53,6 @@
     vertical-align: middle;
 }
 
-#chart {
-    display: flex;
-}
-
-#chart svg {
-    flex: 1
+.chart {
+    width: 80vw;
 }

@@ -1,16 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
-import { PaxServiceService, V1Data, V1Device, V1ListDataResponse, V1Sample } from '../api/pax';
-import { HttpErrorResponse } from '@angular/common/http';
+import { V1Device } from '../api/pax';
 import * as d3 from 'd3';
 import * as Plot from '@observablehq/plot';
-
-// use a dedicated data struct for the samples since it's PITA to convert from strings to dates in 
-// the chart library
-interface Sample {
-    time: Date;
-    ble: number;
-    wifi: number;
-}
+import { DeviceSample, SampleService } from '../sample.service';
 
 interface Metric {
     bigText: string;
@@ -28,14 +20,15 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
     @ViewChild("chart") chartRef?: ElementRef;
 
     metrics: Metric[] = [];
-    data: Sample[] = [];
+    data: DeviceSample[] = [];
     errorMessage: string = "";
-    lastPoll: Date = new Date();
 
     chartIntervalHours: number = 24;
 
+    chart?: (SVGElement | HTMLElement);
+
     constructor(
-        protected paxService: PaxServiceService,
+        protected samples: SampleService,
         private renderer: Renderer2,
     ) { }
 
@@ -43,42 +36,21 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     ngAfterViewInit(): void {
+        this.loadData();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.loadData();
-    }
-    loadData(): void {
-        let dayAgo: string = "" + (new Date().getTime() - (this.chartIntervalHours * 3600 * 1000));
-        let now: string = "" + (new Date().getTime());
-        this.paxService.paxServiceListData(dayAgo, now, 19000000).subscribe({
-            next: (value: V1ListDataResponse) => {
-                if (value.data) {
-                    value.data.forEach((v, i) => {
-                        if (v.deviceId == this.device.id) {
-                            this.data = v.samples?.map(d => {
-                                return {
-                                    time: new Date(parseInt(d.timestamp!)),
-                                    ble: d.bluetoothCount || 0,
-                                    wifi: d.wifiCount || 0,
-                                };
-                            }) || [];
-                        }
-                    });
-                }
-            },
-            error: (e: HttpErrorResponse) => {
-                this.errorMessage = e.message;
-            },
-            complete: () => {
-                this.buildMetrics();
-                this.lastPoll = new Date();
-                this.showChart();
-            },
-        });
+        // This might trigger before the view is visible
+        if (this.chartRef) {
+            this.loadData();
+        }
     }
 
-    chart?: (SVGElement | HTMLElement);
+    loadData(): void {
+        this.data = this.samples.dataForDevice(this.device.id!);
+        this.buildMetrics();
+        this.showChart();
+    }
 
     showChart(): void {
         if (this.chart) {
@@ -87,8 +59,8 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
         }
         let width = this.chartRef?.nativeElement.offsetWidth;
         let height = this.chartRef?.nativeElement.height;
-        let startDate = d3.min(this.data, (d: Sample) => d.time);
-        let endDate = d3.max(this.data, (d: Sample) => d.time)
+        let startDate = d3.min(this.data, (d: DeviceSample) => d.time);
+        let endDate = d3.max(this.data, (d: DeviceSample) => d.time)
 
         /**
          * Plot the actual samples as dots and moving window with averages as a solid line
@@ -118,7 +90,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                 Plot.line(
                     this.data,
                     Plot.windowY(
-                        { reduce: "mean", k: 7, anchor: "middle" },
+                        { reduce: "mean", k: 20, anchor: "middle" },
                         {
                             x: "time",
                             y: "ble",
@@ -137,7 +109,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                 Plot.line(
                     this.data,
                     Plot.windowY(
-                        { reduce: "mean", k: 7, anchor: "middle" },
+                        { reduce: "mean", k: 20, anchor: "middle" },
                         {
                             x: "time",
                             y: "wifi",
@@ -147,6 +119,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                         }
                     )
                 ),
+                Plot.frame(),
             ],
             color: {
                 legend: true,
@@ -158,7 +131,6 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                 fontSize: '10pt',
                 background: '#eeeeee',
                 fill: '#808080',
-                border: 'solid 1px silver',
             }
         })
         this.renderer.appendChild(this.chartRef?.nativeElement, this.chart)

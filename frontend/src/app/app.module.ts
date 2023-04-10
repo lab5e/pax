@@ -10,6 +10,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { DeviceViewComponent } from './device-view/device-view.component';
 import { DeviceMapViewComponent } from './device-map-view/device-map-view.component';
 import { NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
+import { DeviceOverviewComponent } from './device-overview/device-overview.component';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
         MainChartComponent,
         MainPageComponent,
         DeviceViewComponent,
-        DeviceMapViewComponent
+        DeviceMapViewComponent,
+        DeviceOverviewComponent,
     ],
     imports: [
         BrowserModule,

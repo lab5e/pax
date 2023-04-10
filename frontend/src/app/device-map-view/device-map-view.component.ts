@@ -57,6 +57,24 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
             return;
         }
         if (!device.lat || device.lat == 0 || !device.lon || device.lon == 0) {
+            this.enableRotation = false;
+            this.cameraBearing = 0;
+            // Move out to ovewview
+            this.map?.flyTo({
+                center: [10.14, 63.42], // starting position [lng, lat]
+                zoom: 3, // starting zoom
+                pitch: 0,
+                bearing: 0,
+                speed: 2, // make the flying slow
+                curve: 2, // change the speed at which it zooms out
+
+                // This can be any easing function: it takes a number between
+                // 0 and 1 and returns another number between 0 and 1.
+                easing: (t) => t,
+
+                // this animation is considered essential with respect to prefers-reduced-motion
+                essential: true
+            });
             return
         }
         let d_lat = device.lat

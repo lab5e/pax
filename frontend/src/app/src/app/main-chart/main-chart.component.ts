@@ -1,12 +1,5 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { PaxServiceService, V1Data, V1ListDataResponse } from 'src/app/api/pax';
-
-interface SampleSeries {
-    x: number; // Timestamp
-    y: number; // Value
-}
-
+import { SampleService } from 'src/app/sample.service';
 
 @Component({
     selector: 'app-main-chart',
@@ -16,18 +9,14 @@ interface SampleSeries {
 export class MainChartComponent implements OnInit, AfterViewInit {
     @ViewChild("chart") chartRef?: ElementRef;
 
-    dataPoints: V1Data[] = [];
-    errorMessage: string = "";
-    lastPoll: Date = new Date();
-
-    visibleInterval: number = 24;
+    chart?: (SVGElement | HTMLElement);
 
     hasError(): boolean {
-        return this.errorMessage != "";
+        return this.samples.errorMessage != "";
     }
 
     constructor(
-        protected paxService: PaxServiceService,
+        protected samples: SampleService,
     ) {
     }
 
@@ -35,29 +24,11 @@ export class MainChartComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.loadData();
+        this.showChart();
     }
 
-    showInterval(hours: number): void {
-        this.visibleInterval = hours;
-        this.loadData();
-    }
 
-    loadData(): void {
-        let dayAgo: string = "" + (new Date().getTime() - (this.visibleInterval * 3600 * 1000));
-        let now: string = "" + (new Date().getTime());
-        this.paxService.paxServiceListData(dayAgo, now, 19000000).subscribe({
-            next: (value: V1ListDataResponse) => {
-                if (value.data) {
-                    this.dataPoints = value.data;
-                }
-            },
-            error: (e: HttpErrorResponse) => {
-                this.errorMessage = e.message;
-            },
-            complete: () => {
-                this.lastPoll = new Date();
-            },
-        });
+    showChart(): void {
+
     }
 }

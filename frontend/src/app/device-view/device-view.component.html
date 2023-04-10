@@ -1,7 +1,7 @@
 <div class="device-status-page">
     <div class="data">
         <div #chart id="chart" class="chart"></div>
-        Sist oppdatert {{ lastPoll |date:'YYYY-mm-dd HH:MM'}}
+        Sist oppdatert {{ samples.lastPoll |date:'YYYY-mm-dd HH:MM'}}
     </div>
     <div class="device-info">
         <div *ngFor="let metric of metrics" class="metric">

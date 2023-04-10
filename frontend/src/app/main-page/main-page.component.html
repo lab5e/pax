@@ -18,7 +18,7 @@
                     Vis aggregerte data for alle tellere
                 </div>
             </div>
-            <div *ngFor="let device of devices" class="list-item" (click)="setActiveDevice(device)"
+            <div *ngFor="let device of samples.devicesWithData" class="list-item" (click)="setActiveDevice(device)"
                 [ngClass]="{ 'active' : (activeDevice == device)}">
                 <div class="item-title">
                     {{ device.name }}
@@ -29,8 +29,7 @@
             </div>
         </div>
         <div class="detail">
-
-            <app-main-chart *ngIf="activeDevice==null"></app-main-chart>
+            <app-device-overview *ngIf="activeDevice==null"></app-device-overview>
             <app-device-view *ngIf="activeDevice != null" [device]="activeDevice"></app-device-view>
         </div>
     </div>
