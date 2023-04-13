@@ -5,21 +5,25 @@
         Sist oppdatert {{ samples.lastDataUpdate |date:'YYYY-MM-dd HH:mm'}}
     </div>
     <div class="device-info">
-        <div class="metric">
+        <div class="metric ble-metric">
             <div class="metric-value">{{ metricBLE }}</div>
             <div class="metric-desc">Maks antall bluetooth-enheter</div>
         </div>
-        <div class="metric">
+        <div class="metric wifi-metric">
             <div class="metric-value">{{ metricWifi }}</div>
             <div class="metric-desc">Maks antall WiFi-enheter</div>
         </div>
-        <div class="metric">
-            <div class="metric-value">{{ metricSampleCount }}</div>
+        <div class="metric sample-metric">
+            <div class="metric-value ">{{ metricSampleCount }}</div>
             <div class="metric-desc">Målinger i perioden</div>
         </div>
-        <div class="metric">
-            <div class="metric-value">{{ metricDensity }}</div>
-            <div class="metric-desc">Folketetthet ({{ metricDensityPercent }}% av maks)</div>
+        <div class="metric" [ngClass]="{
+            'density-high': (metricDensityPercent > 70),
+            'density-norm': (metricDensityPercent <= 70 && metricDensityPercent >= 30),
+            'density-low': (metricDensityPercent < 30)
+         }">
+            <div class=" metric-value">{{ metricDensityPercent }}%</div>
+            <div class="metric-desc">Folketetthet av maks</div>
         </div>
     </div>
     <div class="location">

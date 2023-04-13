@@ -19,7 +19,6 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
     @Input("device") device: V1Device = {};
     @ViewChild("chart") chartRef?: ElementRef;
 
-    metricDensity: string = "";
     metricDensityPercent: number = 0;
     metricSampleCount: number = 0;
     metricWifi: number = 0;
@@ -102,7 +101,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                 Plot.dot(this.data, {
                     x: d => d.time,
                     y: "ble",
-                    stroke: "blue",
+                    stroke: "darkblue",
                     opacity: 0.2,
                 }),
                 Plot.line(
@@ -112,7 +111,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                         {
                             x: "time",
                             y: "ble",
-                            stroke: "blue",
+                            stroke: "darkblue",
                             strokeWidth: 2,
                             opacity: 0.8,
                         }
@@ -121,7 +120,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                 Plot.dot(this.data, {
                     x: "time",
                     y: "wifi",
-                    stroke: "red",
+                    stroke: "salmon",
                     opacity: 0.3,
                 }),
                 Plot.line(
@@ -131,7 +130,7 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
                         {
                             x: "time",
                             y: "wifi",
-                            stroke: "red",
+                            stroke: "salmon",
                             strokeWidth: 2,
                             opacity: 0.9,
                         }
@@ -141,8 +140,8 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
             ],
             color: {
                 legend: false,
-                domain: ["wifi", "ble"],
-                range: ["red", "blue"]
+                domain: ["wifi", "salmon"],
+                range: ["red", "darkblue"]
             },
             style: {
                 fontFamily: 'sans-serif',
@@ -162,25 +161,9 @@ export class DeviceViewComponent implements OnInit, AfterViewInit, OnChanges {
         let current = this.data[i].ble + this.data[i].wifi;
         let percent: number = Math.round(current * 100 / (maxBle + maxWifi));
 
-        if (percent >= 80) {
-            busyIndicator = "Svært høy"
-        }
-        if (percent >= 60 && percent < 80) {
-            busyIndicator = "Høy";
-        }
-        if (percent >= 40 && percent < 60) {
-            busyIndicator = "Normal";
-        }
-        if (percent >= 25 && percent < 40) {
-            busyIndicator = "Lav";
-        }
-        if (percent < 25) {
-            busyIndicator = "Svært Lav";
-        }
         this.metricBLE = maxBle;
         this.metricWifi = maxWifi;
         this.metricSampleCount = this.data.length;
-        this.metricDensity = busyIndicator;
         this.metricDensityPercent = percent;
     }
 }

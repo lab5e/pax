@@ -50,3 +50,27 @@
     padding: 1em;
     width: 80vw;
 }
+
+.wifi-metric {
+    background-color: salmon;
+}
+
+.ble-metric {
+    background-color: darkblue;
+}
+
+.sample-metric {
+    background-color: #aaaaaa;
+}
+
+.density-high {
+    background-color: red;
+}
+
+.density-norm {
+    background-color: #aaaaaa;
+}
+
+.density-low {
+    background-color: green;
+}
