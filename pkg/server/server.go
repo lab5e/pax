@@ -44,6 +44,7 @@ func Create(c Config) (*Server, error) {
 		log.Fatalf("error starting span listener: %v", err)
 	}
 	go server.spanDataLoop(server.spanListener.Measurements())
+	go server.spanDeviceUpdateLoop(server.spanListener.Devices())
 
 	return server, nil
 }
@@ -64,5 +65,32 @@ func (s *Server) spanDataLoop(input <-chan model.Sample) {
 		}
 
 		s.config.DB.AddSample(sample)
+	}
+}
+
+func (s *Server) spanDeviceUpdateLoop(input <-chan model.Device) {
+	for device := range input {
+		// inefficient, but it doesn't matter for now
+		existingDevice, err := s.config.DB.GetDevice(device.ID)
+		if err != nil {
+			s.config.DB.AddDevice(model.Device{
+				ID:   device.ID,
+				Name: device.Name,
+				Lat:  device.Lat,
+				Lon:  device.Lon,
+			})
+			continue
+		}
+
+		if existingDevice.Name != device.Name || existingDevice.Lat != device.Lat || existingDevice.Lon != device.Lon {
+			existingDevice.Name = device.Name
+			existingDevice.Lat = device.Lat
+			existingDevice.Lon = device.Lon
+			log.Printf("Updating device %v", existingDevice)
+			if _, err := s.config.DB.UpdateDevice(existingDevice); err != nil {
+				log.Printf("Error updating device: %v", err)
+			}
+
+		}
 	}
 }

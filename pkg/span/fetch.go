@@ -61,37 +61,42 @@ func (f *Fetch) fetchDevices() error {
 	}
 
 	for _, dev := range devices.GetDevices() {
-		name := dev.GetTags()["name"]
+		d := makeDBDevice(dev)
 
-		var lat, lon float64
-		var err error
-		posStr := dev.GetTags()["lat"]
-		if posStr != "" {
-			lat, err = strconv.ParseFloat(posStr, 64)
-			if err != nil {
-				log.Printf("Error converting latitude (%s) for device %s: %v", posStr, dev.GetDeviceId(), err)
-			}
-		}
-		posStr = dev.GetTags()["lon"]
-		if posStr != "" {
-			lon, err = strconv.ParseFloat(posStr, 64)
-			if err != nil {
-				log.Printf("Error converting longitude (%s) for device %s: %v", posStr, dev.GetDeviceId(), err)
-			}
-		}
-
-		err = f.DB.AddDevice(model.Device{
-			ID:   *dev.DeviceId,
-			Name: name,
-			Lat:  lat,
-			Lon:  lon,
-		})
+		err = f.DB.AddDevice(d)
 		if err == nil {
 			log.Printf("added device [%s]", *dev.DeviceId)
 		}
 
 	}
 	return nil
+}
+
+func makeDBDevice(dev spanapi.Device) model.Device {
+	name := dev.GetTags()["name"]
+
+	var lat, lon float64
+	var err error
+	posStr := dev.GetTags()["lat"]
+	if posStr != "" {
+		lat, err = strconv.ParseFloat(posStr, 64)
+		if err != nil {
+			log.Printf("Error converting latitude (%s) for device %s: %v", posStr, dev.GetDeviceId(), err)
+		}
+	}
+	posStr = dev.GetTags()["lon"]
+	if posStr != "" {
+		lon, err = strconv.ParseFloat(posStr, 64)
+		if err != nil {
+			log.Printf("Error converting longitude (%s) for device %s: %v", posStr, dev.GetDeviceId(), err)
+		}
+	}
+	return model.Device{
+		ID:   *dev.DeviceId,
+		Name: name,
+		Lat:  lat,
+		Lon:  lon,
+	}
 }
 
 func (f *Fetch) addSample(entry spanapi.OutputDataMessage) {
