@@ -4,6 +4,9 @@ import { environment } from 'src/environments/environment';
 import { AttributionControl, FullscreenControl, Map, NavigationControl, Marker, MarkerOptions } from 'maplibre-gl';
 import { SampleService } from '../sample.service';
 
+interface MapMetadata {
+    bounds: number[];
+}
 @Component({
     selector: 'app-device-map-view',
     templateUrl: './device-map-view.component.html',
@@ -30,26 +33,36 @@ export class DeviceMapViewComponent implements OnInit, AfterViewInit, OnDestroy,
         if (this.map) {
             return
         }
+        let response = fetch(environment.apiHost + "/map/tiles/metadata.json").then((res: Response) => {
+            res.json().then((data) => {
+                let resp = data as unknown;
+                let metadata: MapMetadata = resp as MapMetadata;
+                let bounds = metadata.bounds;
 
-        this.map = new Map({
-            container: this.mapContainer!.nativeElement,
-            style: environment.apiHost + "/map/styles/basic.json",
-            center: [10.14, 63.42], // starting position [lng, lat]
-            zoom: 3, // starting zoom
-            maxBounds: [[9.78, 63.17], [10.97, 63.56]]
+                let latCenter = (bounds[1] + bounds[3]) / 2;
+                let lonCenter = (bounds[0] + bounds[2]) / 2;
+                this.map = new Map({
+                    container: this.mapContainer!.nativeElement,
+                    style: environment.apiHost + "/map/styles/basic.json",
+                    center: [lonCenter, latCenter], // starting position [lng, lat]
+                    zoom: 3, // starting zoom
+                    maxBounds: [[bounds[0], bounds[1]], [bounds[2], bounds[3]]]
+                });
+                this.map.addControl(new NavigationControl());
+                this.map.addControl(new AttributionControl({
+                    compact: false, customAttribution:
+                        "Style © <a href='http://openmaptiles.org/'>MapTiler</a> | " +
+                        "Data © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
+                }));
+                this.samples.activeDevices().subscribe({
+                    complete: () => {
+                        this.samples.addMapMarkers(this.map!);
+                    }
+                });
+                this.flyToMarker(this.device, this.map);
+            });
         });
-        this.map.addControl(new NavigationControl());
-        this.map.addControl(new AttributionControl({
-            compact: false, customAttribution:
-                "Style © <a href='http://openmaptiles.org/'>MapTiler</a> | " +
-                "Data © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
-        }));
-        this.samples.activeDevices().subscribe({
-            complete: () => {
-                this.samples.addMapMarkers(this.map!);
-            }
-        });
-        this.flyToMarker(this.device, this.map);
+
     }
 
     ngOnDestroy(): void {
