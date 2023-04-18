@@ -21,6 +21,7 @@ type Listener struct {
 	Token            string
 	CollectionID     string
 	measurementCh    chan model.Sample
+	deviceCh         chan model.Device
 	cancel           context.CancelFunc
 	ctx              context.Context
 	shutdownComplete sync.WaitGroup
@@ -32,6 +33,7 @@ func NewListener(token string, collectionID string) *Listener {
 		Token:         token,
 		CollectionID:  collectionID,
 		measurementCh: make(chan model.Sample),
+		deviceCh:      make(chan model.Device),
 	}
 }
 
@@ -65,6 +67,10 @@ func (s *Listener) Stop() {
 // Measurements returns a channel that streams apipb.PAXMessage
 func (s *Listener) Measurements() <-chan model.Sample {
 	return s.measurementCh
+}
+
+func (s *Listener) Devices() <-chan model.Device {
+	return s.deviceCh
 }
 
 func (s *Listener) readDataStream(ds apitools.DataStream) {
@@ -115,9 +121,12 @@ func (s *Listener) readDataStream(ds apitools.DataStream) {
 			UptimeSeconds:   pb.SecondsUptime,
 		}
 
+		s.deviceCh <- makeDBDevice(msg.GetDevice())
+
 		if s.ctx.Err() == context.Canceled {
 			log.Printf("shutting down spanlistener")
 			close(s.measurementCh)
+			close(s.deviceCh)
 			s.shutdownComplete.Done()
 			return
 		}

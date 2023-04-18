@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/lab5e/gotileserver"
+	osmtrondheim "github.com/lab5e/osm-trondheim"
 	"github.com/lab5e/pax/doc"
 	"github.com/lab5e/pax/frontend"
 	paxv1 "github.com/lab5e/pax/pkg/pax/v1"
@@ -49,7 +50,7 @@ func (s *Server) startHTTP() error {
 
 	httpMux := http.NewServeMux()
 
-	gotileserver.RegisterHandler(httpMux, s.config.TileServerURL)
+	gotileserver.RegisterHandler(httpMux, s.config.TileServerURL, osmtrondheim.TrondheimOSMTiles())
 	mux.PathPrefix("/map").Handler(httpMux)
 	mux.PathPrefix("/").Handler(http.FileServer(http.FS(frontendFS)))
 
