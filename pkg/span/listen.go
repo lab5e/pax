@@ -11,7 +11,6 @@ import (
 
 	pax "github.com/lab5e/pax/pkg/pax/v1"
 
-	"github.com/lab5e/go-spanapi/v4"
 	"github.com/lab5e/go-spanapi/v4/apitools"
 	"github.com/lab5e/pax/pkg/model"
 	"google.golang.org/protobuf/proto"
@@ -38,14 +37,8 @@ func NewListener(token string, collectionID string) *Listener {
 
 // Start fires up the Spanlistener
 func (s *Listener) Start() error {
-	config := spanapi.NewConfiguration()
-	config.Debug = true
-
-	s.ctx, s.cancel = context.WithCancel(apitools.ContextWithAuth(s.Token))
-
 	clientID := fmt.Sprintf("pax-%d", time.Now().UnixMicro())
 
-	// ds, err := apitools.NewCollectionDataStream(s.ctx, config, s.CollectionID)
 	ds, err := apitools.NewMQTTStream(
 		apitools.WithAPIToken(s.Token),
 		apitools.WithCollectionID(s.CollectionID),

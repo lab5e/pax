@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *service) GetDevice(ctx context.Context, req *paxv1.GetDeviceRequest) (*paxv1.GetDeviceResponse, error) {
+func (s *service) GetDevice(_ context.Context, req *paxv1.GetDeviceRequest) (*paxv1.GetDeviceResponse, error) {
 	device, err := s.db.GetDevice(req.Id)
 	if err != nil {
 		log.Printf("error getting device [%s]: %v", req.Id, err)
@@ -20,7 +20,7 @@ func (s *service) GetDevice(ctx context.Context, req *paxv1.GetDeviceRequest) (*
 	return &paxv1.GetDeviceResponse{Device: device.Proto()}, nil
 }
 
-func (s *service) UpdateDevice(ctx context.Context, req *paxv1.UpdateDeviceRequest) (*paxv1.UpdateDeviceResponse, error) {
+func (s *service) UpdateDevice(_ context.Context, req *paxv1.UpdateDeviceRequest) (*paxv1.UpdateDeviceResponse, error) {
 	device, err := s.db.UpdateDevice(model.DeviceFromProto(req.Device))
 	if err != nil {
 		log.Printf("error updating device [%s]: %v", req.Device.Id, err)
@@ -29,7 +29,7 @@ func (s *service) UpdateDevice(ctx context.Context, req *paxv1.UpdateDeviceReque
 	return &paxv1.UpdateDeviceResponse{Device: device.Proto()}, nil
 }
 
-func (s *service) ListDevices(ctx context.Context, req *paxv1.ListDevicesRequest) (*paxv1.ListDevicesResponse, error) {
+func (s *service) ListDevices(_ context.Context, _ *paxv1.ListDevicesRequest) (*paxv1.ListDevicesResponse, error) {
 	devices, err := s.db.ListDevices()
 	if err != nil {
 		log.Printf("error listing devices: %v", err)

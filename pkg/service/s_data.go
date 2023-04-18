@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *service) ListData(ctx context.Context, req *paxv1.ListDataRequest) (*paxv1.ListDataResponse, error) {
+func (s *service) ListData(_ context.Context, req *paxv1.ListDataRequest) (*paxv1.ListDataResponse, error) {
 	devices, err := s.db.ListDevices()
 	if err != nil {
 		log.Printf("error listing devices: %v", err)
