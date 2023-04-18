@@ -69,6 +69,7 @@ func (s *Listener) Measurements() <-chan model.Sample {
 	return s.measurementCh
 }
 
+// Devices returns a channel
 func (s *Listener) Devices() <-chan model.Device {
 	return s.deviceCh
 }
@@ -123,7 +124,7 @@ func (s *Listener) readDataStream(ds apitools.DataStream) {
 
 		s.deviceCh <- makeDBDevice(msg.GetDevice())
 
-		if s.ctx.Err() == context.Canceled {
+		if s.ctx != nil && s.ctx.Err() == context.Canceled {
 			log.Printf("shutting down spanlistener")
 			close(s.measurementCh)
 			close(s.deviceCh)
